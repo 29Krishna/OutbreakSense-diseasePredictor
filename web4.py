@@ -6,13 +6,14 @@ from streamlit_option_menu import option_menu
 st.set_page_config(page_title='OutbreakSense - Predict Diseases with Intelligent insights', layout='wide', page_icon='🩺')
 
 # Load trained models
-diabetes_model = pickle.load(open(r"training_models\diabetes_model.sav", 'rb'))
-parkinsons_model = pickle.load(open(r"training_models\parkinsons_model.sav", 'rb'))
-hearts_model = pickle.load(open(r"training_models\hearts_model.sav", 'rb'))
+model_path = os.path.join(os.getcwd(), "saved-models", "diabetes_model.sav")
+diabetes_model = pickle.load(open(model_path, 'rb'))
+model_path = os.path.join(os.getcwd(), "saved-models", "parkinsons_model.sav")
+parkinsons_model = pickle.load(open(model_path, 'rb'))
+model_path = os.path.join(os.getcwd(), "saved-models", "hearts_model.sav")
+hearts_model = pickle.load(open(model_path, 'rb'))
 
-# ------------------------
-# ✅ Sidebar Navigation Fix
-# ------------------------
+
 with st.sidebar:
     st.title("🩺 OutbreakSense")
     st.info("Select a disease prediction model or predict an outbreak in your area.")
@@ -25,8 +26,8 @@ with st.sidebar:
         default_index=0
     )
 
-    # ✅ Show Disease Selection Only If "Disease Prediction" Is Selected
-    disease_selected = None  # Prevents 'undefined variable' error
+    
+    disease_selected = None  
     if selected == "Disease Prediction":
         disease_selected = option_menu(
             "Select Disease",
@@ -36,9 +37,6 @@ with st.sidebar:
             default_index=0
         )
 
-# ------------------------
-# Prediction Functions
-# ------------------------
 
 # ✅ Diabetes Prediction
 def diabetes_prediction():
@@ -134,9 +132,7 @@ def outbreak_prediction():
             else:
                 st.success(f"No outbreak detected in {region}.")
 
-# ------------------------
-# Display Appropriate Section
-# ------------------------
+
 if selected == "Disease Prediction" and disease_selected:
     if disease_selected == "Diabetes":
         diabetes_prediction()
